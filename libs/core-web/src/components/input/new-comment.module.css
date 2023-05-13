@@ -38,5 +38,11 @@
 }
 
 .form button {
-  background-color: white;
+  background-color: #dcfff9 !important;
+  color: #ffffff;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.form button:hover {
+  background-color: #ffffff !important;
 }
