@@ -2,7 +2,11 @@
 
 import Head from 'next/head';
 import { getFeaturedEvents } from '@dummy-data';
-import { EventList, Layout } from '@nextjs-learning/core-web/components';
+import {
+  EventList,
+  Layout,
+  NewsletterRegistration,
+} from '@nextjs-learning/core-web/components';
 import React from 'react-dom';
 
 export type Props = {
@@ -33,6 +37,7 @@ export default function Home(props: Props) {
           content="A collection of upcoming dates with my bebu."
         />
       </Head>
+      <NewsletterRegistration />
       <EventList events={events} />
     </>
   );

@@ -15,11 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@dummy-data": ["apps/event-app/pages/api/dummy-data.ts"],
       "@nextjs-learning/core-web/components": [
         "libs/core-web/src/components/index.ts"
       ],
-      "@nextjs-learning/core-web/types": ["libs/core-web/src/types/index.ts"],
-      "@dummy-data": ["apps/event-app/pages/api/dummy-data.ts"]
+      "@nextjs-learning/core-web/types": ["libs/core-web/src/types/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

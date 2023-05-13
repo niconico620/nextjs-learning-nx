@@ -6,9 +6,15 @@ import {
   EventSummary,
   EventLogistics,
   EventContent,
+  Comments,
 } from '@nextjs-learning/core-web/components';
+import { EventType } from '@nextjs-learning/core-web/types';
 
-function EventDetails(props: any) {
+type Props = {
+  event: EventType;
+};
+
+function EventDetails(props: Props) {
   const { event } = props;
 
   if (!event) {
@@ -34,6 +40,7 @@ function EventDetails(props: any) {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
+      <Comments eventId={event.id} />
     </Fragment>
   );
 }

@@ -9,6 +9,7 @@ export async function getAllEvents() {
     'https://nextjs-course-9401c-default-rtdb.asia-southeast1.firebasedatabase.app/events.json'
   );
   const data = await response.json();
+  console.log(data);
 
   const transformedEvents = [];
 
