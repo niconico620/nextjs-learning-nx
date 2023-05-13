@@ -16,7 +16,7 @@ async function handler(req, res) {
 
     //store newFeedback in a database.
     const mongoURI = process.env.MONGODB_URI;
-    const client = await MongoClient.connect(mongoURI);
+    const client = await MongoClient.connect("mongodb+srv://niconico620:bALkr6XqYNBNvVA9@bebudates.djiyias.mongodb.net/?retryWrites=true&w=majority");
 
     const db = client.db('newsletter');
 
