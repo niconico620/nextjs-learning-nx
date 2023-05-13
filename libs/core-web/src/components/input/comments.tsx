@@ -9,13 +9,16 @@ export function Comments(props: any) {
 
   const [showComments, setShowComments] = useState(false);
   const [commentItems, setCommentItems] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (showComments) {
+      setIsLoading(true);
       fetch(`/api/comments/${eventId}`)
         .then((response) => response.json())
         .then((data) => {
           setCommentItems(data.comments);
+          setIsLoading(false);
         });
     }
   }, [eventId, showComments]);
@@ -43,6 +46,7 @@ export function Comments(props: any) {
         {showComments ? 'Hide' : 'Show'} Comments
       </button>
       {showComments && <NewComment onAddComment={addCommentHandler} />}
+      {isLoading && <p>Loading...</p>}
       {showComments && commentItems.length !== 0 && (
         <CommentList items={commentItems} />
       )}
