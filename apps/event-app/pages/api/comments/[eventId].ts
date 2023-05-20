@@ -17,7 +17,7 @@ async function handler(req, res) {
   if (req.method === 'GET') {
     const db = await connectToDatabase();
     const collection = db.collection('comment');
-    const comments = await collection.find({ eventId: eventId }).toArray();
+    const comments = await collection.find({ eventId: eventId }).sort({ _id: -1 }).toArray();
 
     res.status(200).json({
       message: 'COMMENTS LOADED',
@@ -47,9 +47,9 @@ async function handler(req, res) {
       message: 'Success!',
       addedComment: newComment,
     });
-
-    client.close();
   }
+
+  client.close();
 }
 
 export default handler;
