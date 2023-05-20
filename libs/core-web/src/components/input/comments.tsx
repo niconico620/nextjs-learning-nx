@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { CommentList } from './comment-list';
 import { NewComment } from './new-comment';
 import classes from './comments.module.css';
+import { LoadingIcon } from '../atoms';
 
 export function Comments(props: any) {
   const { eventId } = props;
@@ -37,7 +38,10 @@ export function Comments(props: any) {
       },
     })
       .then((response) => response.json())
-      .then((data) => setCommentItems([...commentItems, data.addedComment]));
+      .then((data) => {
+        setCommentItems([data.addedComment, ...commentItems]);
+        console.log(data.message);
+      });
   }
 
   return (
@@ -46,8 +50,12 @@ export function Comments(props: any) {
         {showComments ? 'Hide' : 'Show'} Comments
       </button>
       {showComments && <NewComment onAddComment={addCommentHandler} />}
-      {isLoading && <p>Loading...</p>}
-      {showComments && commentItems.length !== 0 && (
+      {isLoading && (
+        <p>
+          <LoadingIcon />
+        </p>
+      )}
+      {showComments && commentItems.length !== 0 && !isLoading && (
         <CommentList items={commentItems} />
       )}
     </section>

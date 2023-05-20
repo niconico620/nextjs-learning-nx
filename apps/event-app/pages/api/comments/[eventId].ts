@@ -40,11 +40,26 @@ async function handler(req, res) {
     };
 
     // store newComment in the database.
-    const db = await connectToDatabase();
-    await db.collection('comment').insertOne(newComment);
+
+    let db;
+
+    try {
+      db = await connectToDatabase();
+    } catch (error) {
+      res.status(500).json({ message: 'Database connection failed.' });
+      return;
+    }
+
+    try {
+      await db.collection('comment').insertOne(newComment);
+      client.close();
+    } catch (error) {
+      res.status(500).json({ message: 'Inserting data failed.' });
+    }
+
 
     res.status(201).json({
-      message: 'Success!',
+      message: 'Successfully posted your comment!',
       addedComment: newComment,
     });
   }

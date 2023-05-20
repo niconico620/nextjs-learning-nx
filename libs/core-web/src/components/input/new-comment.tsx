@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import classes from './new-comment.module.css';
 
 export function NewComment(props: any) {
   const [isInvalid, setIsInvalid] = useState(false);
+  const [showCommentStatus, setShowCommentStatus] = useState(false);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -33,6 +35,13 @@ export function NewComment(props: any) {
       name: enteredName,
       text: enteredComment,
     });
+
+    emailInputRef.current.value = '';
+    nameInputRef.current.value = '';
+    commentInputRef.current.value = '';
+
+    setShowCommentStatus(true);
+    toast('Posted your comment.');
   }
 
   return (
@@ -53,6 +62,19 @@ export function NewComment(props: any) {
       </div>
       {isInvalid && <p>Please enter a valid email address and comment!</p>}
       <button>Submit</button>
+
+      {showCommentStatus && (
+        <ToastContainer
+          position="top-center"
+          autoClose={1500}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          theme="colored"
+        />
+      )}
     </form>
   );
 }

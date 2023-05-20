@@ -25,6 +25,7 @@ async function handler(req, res) {
 
     //store newFeedback in a database.
     let db;
+
     try {
       db = await connectToDatabase();
     } catch (error) {
