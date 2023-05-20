@@ -4,7 +4,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const mongoURI = process.env.MONGODB_URI;
-console.log(mongoURI);
 const client = new MongoClient(mongoURI);
 
 async function connectToDatabase() {

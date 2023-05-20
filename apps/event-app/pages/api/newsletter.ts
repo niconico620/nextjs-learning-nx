@@ -16,7 +16,6 @@ async function handler(req, res) {
 
     //store newFeedback in a database.
     const mongoURI = process.env.MONGODB_URI;
-    console.log(mongoURI);
     const client = await MongoClient.connect(mongoURI);
 
     const db = client.db('newsletter');
@@ -24,7 +23,7 @@ async function handler(req, res) {
     await db.collection('emails').insertOne({ email: email });
 
 
-    res.status(201).json({ message: 'Success!' });
+    res.status(201).json({ message: 'Success!', email });
 
     client.close();
 

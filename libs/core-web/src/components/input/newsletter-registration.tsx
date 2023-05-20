@@ -1,27 +1,38 @@
-import React, { FormEvent, useRef } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
 import classes from './newsletter-registration.module.css';
+import { LoadingIcon } from '../atoms';
 
 export function NewsletterRegistration() {
   const emailInputRef = useRef<HTMLInputElement>(null);
-  function registrationHandler(event: any) {
-    event.preventDefault();
+  const [status, setStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
+  function registrationHandler(event: { preventDefault: () => void }) {
+    event.preventDefault();
     // fetch user input (state or refs)
     // optional: validate input
     // send valid data to API
     const enteredEmail = emailInputRef.current?.value;
 
-    const reqBody = { email: enteredEmail };
+    if (enteredEmail) {
+      const reqBody = { email: enteredEmail };
 
-    fetch('/api/newsletter', {
-      method: 'POST',
-      body: JSON.stringify(reqBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => alert(`${data.message}`));
+      setIsLoading(true);
+
+      fetch('/api/newsletter', {
+        method: 'POST',
+        body: JSON.stringify(reqBody),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setStatus(`${data.message}`);
+          emailInputRef.current!.value = '';
+          setIsLoading(false);
+        });
+    }
   }
 
   return (
@@ -39,6 +50,13 @@ export function NewsletterRegistration() {
           <button>Register</button>
         </div>
       </form>
+      {isLoading ? (
+        <span>
+          <LoadingIcon />
+        </span>
+      ) : (
+        <p style={{ color: '#4BB543' }}>{status}</p>
+      )}
     </section>
   );
 }
