@@ -3,6 +3,15 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
+const mongoURI = process.env.MONGODB_URI;
+const client = new MongoClient(mongoURI);
+
+async function connectToDatabase() {
+  await client.connect();
+  return client.db('newsletter');
+}
+
+
 async function handler(req, res) {
   if (req.method === 'POST') {
     const email = req.body.email;
@@ -15,17 +24,23 @@ async function handler(req, res) {
     }
 
     //store newFeedback in a database.
-    const mongoURI = process.env.MONGODB_URI;
-    const client = await MongoClient.connect(mongoURI);
+    let db;
+    try {
+      db = await connectToDatabase();
+    } catch (error) {
+      res.status(500).json({ message: 'Database connection failed.' });
+      return;
+    }
 
-    const db = client.db('newsletter');
+    try {
+      await db.collection('emails').insertOne({ email: email });
+      client.close();
+    } catch (error) {
+      res.status(500).json({ message: 'Inserting data failed.' });
+    }
 
-    await db.collection('emails').insertOne({ email: email });
 
-
-    res.status(201).json({ message: 'Success!', email });
-
-    client.close();
+    res.status(201).json({ message: 'Signed up!', email });
 
   }
 }

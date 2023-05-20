@@ -1,10 +1,10 @@
-import React, { FormEvent, useRef, useState } from 'react';
-import classes from './newsletter-registration.module.css';
+import React, { useRef, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import { LoadingIcon } from '../atoms';
+import classes from './newsletter-registration.module.css';
 
 export function NewsletterRegistration() {
   const emailInputRef = useRef<HTMLInputElement>(null);
-  const [status, setStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   function registrationHandler(event: { preventDefault: () => void }) {
@@ -28,7 +28,7 @@ export function NewsletterRegistration() {
       })
         .then((response) => response.json())
         .then((data) => {
-          setStatus(`${data.message}`);
+          toast(`${data.message}`);
           emailInputRef.current!.value = '';
           setIsLoading(false);
         });
@@ -47,7 +47,7 @@ export function NewsletterRegistration() {
             aria-label="Your email"
             ref={emailInputRef}
           />
-          <button>Register</button>
+          <button className="registerBtn">Register</button>
         </div>
       </form>
       {isLoading ? (
@@ -55,7 +55,16 @@ export function NewsletterRegistration() {
           <LoadingIcon />
         </span>
       ) : (
-        <p style={{ color: '#4BB543' }}>{status}</p>
+        <ToastContainer
+          position="top-center"
+          autoClose={1500}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          theme="colored"
+        />
       )}
     </section>
   );
