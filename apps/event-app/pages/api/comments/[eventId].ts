@@ -15,9 +15,23 @@ async function handler(req, res) {
   const eventId = req.query.eventId;
 
   if (req.method === 'GET') {
-    const db = await connectToDatabase();
-    const collection = db.collection('comment');
-    const comments = await collection.find({ eventId: eventId }).sort({ _id: -1 }).toArray();
+    let db;
+    let comments;
+
+    try {
+      db = await connectToDatabase();
+    } catch (error) {
+      res.status(500).json({ message: 'Database connection failed.' });
+      return;
+    }
+
+    try {
+      const collection = db.collection('comment');
+      comments = await collection.find({ eventId: eventId }).sort({ _id: -1 }).toArray();
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to retrieve comments data.' });
+    }
+
 
     res.status(200).json({
       message: 'COMMENTS LOADED',
