@@ -28,7 +28,6 @@ export function NewsletterRegistration() {
       })
         .then((response) => response.json())
         .then((data) => {
-          toast(`${data.message}`);
           emailInputRef.current!.value = '';
           setIsLoading(false);
         });

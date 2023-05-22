@@ -66,16 +66,15 @@ async function handler(req, res) {
 
     try {
       await db.collection('comment').insertOne(newComment);
+      res.status(201).json({
+        message: 'Successfully posted your comment!',
+        addedComment: newComment,
+      });
       client.close();
     } catch (error) {
       res.status(500).json({ message: 'Inserting data failed.' });
+      return;
     }
-
-
-    res.status(201).json({
-      message: 'Successfully posted your comment!',
-      addedComment: newComment,
-    });
   }
 
   client.close();

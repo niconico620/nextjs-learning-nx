@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { CommentList } from './comment-list';
 import { NewComment } from './new-comment';
 import classes from './comments.module.css';
 import { LoadingIcon } from '../atoms';
+import { ToastContainer, toast } from 'react-toastify';
 
 export function Comments(props: any) {
   const { eventId } = props;
 
   const [showComments, setShowComments] = useState(false);
   const [commentItems, setCommentItems] = useState<any>([]);
+  const [showPostCommentNotif, setShowPostCommentNotif] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export function Comments(props: any) {
     setShowComments((prevStatus) => !prevStatus);
   }
 
-  function addCommentHandler(commentData: any) {
+  function addCommentHandler(commentData: any, clearFormFields: VoidFunction) {
     // send data to API
     fetch(`/api/comments/${eventId}`, {
       method: 'POST',
@@ -37,10 +39,21 @@ export function Comments(props: any) {
         'Content-Type': 'application/json',
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Failed to add comment.');
+        }
+      })
       .then((data) => {
         setCommentItems([data.addedComment, ...commentItems]);
-        console.log(data.message);
+        setShowPostCommentNotif(true);
+        toast.success(data.message);
+        clearFormFields();
+      })
+      .catch((error) => {
+        toast.error(error);
       });
   }
 
@@ -57,6 +70,19 @@ export function Comments(props: any) {
       )}
       {showComments && commentItems.length !== 0 && !isLoading && (
         <CommentList items={commentItems} />
+      )}
+
+      {showPostCommentNotif && (
+        <ToastContainer
+          position="top-center"
+          autoClose={1500}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          theme="colored"
+        />
       )}
     </section>
   );

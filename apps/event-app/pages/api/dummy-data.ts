@@ -1,3 +1,5 @@
+//normally this wouldnt be in the api folder. should probably make a helpers/api-util folder/file to place all these helper functions in
+
 export async function getFeaturedEvents() {
   const allEvents = await getAllEvents();
 
